@@ -1,0 +1,53 @@
+{
+  "name": "@jalvarezsamayoa/factory",
+  "version": "0.1.0",
+  "description": "Agents, skills, and tools for an AI software development factory.",
+  "type": "module",
+  "license": "GPL-3.0-only",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "factory": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "agents",
+    "skills",
+    "commands",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "test": "node --test test/*.test.js",
+    "prepublishOnly": "npm run clean && npm run build && npm test",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@opencode/plugin": "^2.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "claude",
+    "antigravity",
+    "agents",
+    "skills",
+    "software-factory"
+  ]
+}
