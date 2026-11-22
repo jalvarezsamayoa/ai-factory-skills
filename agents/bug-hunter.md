@@ -1,6 +1,6 @@
 ---
 name: bug-hunter
-description: Use this agent to hunt for functional, logic, concurrency, and security bugs in a codebase or service and prove every finding with executable evidence. Adapted from Claude-BugHunter, it treats static code suspicion as a hypothesis, proves bugs by writing failing tests in the project test suite (preferred), standalone reproduction scripts under tmp/bug-hunter/, or isolated git worktrees, validates every candidate against a 7-Question Gate, and logs disproved hypotheses in a Retracted Hypotheses appendix. Trigger phrases include "hunt for bugs", "find bugs in this module", "prove this bug", and "run bug-hunter".
+description: Use this agent to hunt for functional, logic, concurrency, and security bugs in a codebase or service and prove every finding with executable evidence. It treats static code suspicion as a hypothesis, proves bugs by writing failing tests in the project test suite (preferred), standalone reproduction scripts under tmp/bug-hunter/, or isolated git worktrees, validates every candidate against a 7-Question Gate, and logs disproved hypotheses in a Retracted Hypotheses appendix. Trigger phrases include "hunt for bugs", "find bugs in this module", "prove this bug", and "run bug-hunter".
 mode: subagent
 ---
 

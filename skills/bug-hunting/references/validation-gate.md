@@ -1,6 +1,6 @@
 # Validation Gate & False-Positive Discipline
 
-Adapted from `Claude-BugHunter`'s `triage-validation` and `bb-methodology` skills for codebase bug hunting. Every candidate bug must pass the False-Positive Discipline rules, the 7-Question Gate, and (for Critical/High findings) the Pre-Severity Gate before it appears in a report.
+Every candidate bug must pass the False-Positive Discipline rules, the 7-Question Gate, and (for Critical/High findings) the Pre-Severity Gate before it appears in a report.
 
 ## 1. False-Positive Discipline Rules
 

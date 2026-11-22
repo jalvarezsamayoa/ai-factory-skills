@@ -1,11 +1,11 @@
 ---
 name: bug-hunting
-description: Use when the user asks to hunt for bugs, audit a codebase or module for functional or security defects, prove or reproduce a suspected bug, or run bug-hunting. Adapts the Claude-BugHunter 5-phase methodology, A->B sibling cluster hunting, and 7-Question Gate to codebase bug hunting, requiring every reported bug to be proven with executable evidence in the test suite, tmp/bug-hunter/, or an isolated git worktree.
+description: Use when the user asks to hunt for bugs, audit a codebase or module for functional or security defects, prove or reproduce a suspected bug, or run bug-hunting. Uses a 5-phase methodology, A->B sibling cluster hunting, and a 7-Question Gate for codebase bug hunting, requiring every reported bug to be proven with executable evidence in the test suite, tmp/bug-hunter/, or an isolated git worktree.
 ---
 
 # Bug Hunting
 
-Hunt for functional, logic, concurrency, and security bugs in a codebase using empirical, execution-backed verification adapted from `Claude-BugHunter`.
+Hunt for functional, logic, concurrency, and security bugs in a codebase using empirical, execution-backed verification.
 
 ## Core Rule: Proof Over Suspicion
 

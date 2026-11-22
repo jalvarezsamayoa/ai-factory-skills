@@ -1,6 +1,6 @@
 # Bug Hunting Checklists & Language Sink Patterns
 
-Adapted from `Claude-BugHunter` for source-code and service bug hunting. Use these checklists during Phases 1, 2, and 3 to form high-signal hypotheses, then prove each hypothesis with executable tests.
+Use these checklists during Phases 1, 2, and 3 to form high-signal hypotheses for source-code and service bug hunting, then prove each hypothesis with executable tests.
 
 ## 1. Crown-Jewel Threat Modeling Template
 

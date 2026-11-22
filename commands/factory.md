@@ -18,11 +18,11 @@ If the `factory` tool is not available, perform the same work directly:
 1. For `help`, summarize the commands, agents, skill, and workspace layout.
 2. For `workspace`, create the directory and template files described in the
    `factory` skill.
-3. For `init`, copy the packaged `agents/*.md`, `skills/factory/SKILL.md`, and
+3. For `init`, copy the packaged `agents/*.md`, `skills/*`, and
    `commands/factory.md` into the harness's discovery folders:
    - OpenCode: `.opencode/agents`, `.opencode/skills`, `.opencode/commands`
-   - Claude: `.claude/agents`, `.claude/skills`, `.claude/commands`
-   - Antigravity: `.agents/plugins/factory` (bundle containing `plugin.json`, `rules/AGENTS.md`, and `skills/factory/SKILL.md`)
+   - Claude Code: `.claude/agents`, `.claude/skills`, `.claude/commands`
+   - Antigravity: `.agents/plugins/factory` (bundle containing `plugin.json`, `rules/AGENTS.md`, and `skills/*`)
 
 Never overwrite a file the user has edited unless the arguments include
 `--force`. Report every file created, updated, skipped, or unchanged.

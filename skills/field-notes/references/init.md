@@ -1,27 +1,27 @@
 # Field Notes Manual Initialization
 
-Reference procedure and canonical templates for initializing the field-notes pattern in environments without the `field-notes` tool (Claude Code, Gemini CLI, Copilot CLI).
+Reference procedure and canonical templates for initializing the field-notes pattern in any AI coding harness (OpenCode, Claude Code, Antigravity, or others).
 
 ## Procedure
 
-1. Ask for explicit user consent before modifying any files. State that you will create `.opencode/field-notes.md` and append a `## Field Notes` section to `AGENTS.md`.
-2. Create directory `.opencode/` at project root if missing.
-3. Write `.opencode/field-notes.md` using the canonical template below. Never overwrite an existing `.opencode/field-notes.md` unless the user explicitly requests a reset.
-4. Check if `AGENTS.md` exists:
-   * If `AGENTS.md` does not exist, create it with the canonical `AGENTS.md` section template below.
-   * If `AGENTS.md` exists and does not contain `## Field Notes`, append the canonical `AGENTS.md` section to the end of the file.
-   * If `AGENTS.md` already contains `## Field Notes`, leave it untouched.
+1. Ask for explicit user consent before modifying any files. State that you will create `docs/field-notes.md` and append a `## Field Notes` section to the project's instructions file (`AGENTS.md`, or `CLAUDE.md` if the repository uses that instead).
+2. Create directory `docs/` at the project root if missing.
+3. Write `docs/field-notes.md` using the canonical template below. Never overwrite an existing field-notes file (`docs/field-notes.md` or `.opencode/field-notes.md`) unless the user explicitly requests a reset.
+4. Check the project's instructions file (`AGENTS.md`, or `CLAUDE.md` if present and `AGENTS.md` is absent):
+   - If neither exists, create `AGENTS.md` with the canonical section template below.
+   - If the instructions file exists and does not contain `## Field Notes`, append the canonical section to the end of the file.
+   - If it already contains `## Field Notes`, leave it untouched.
 
 ## Canonical Templates
 
-### .opencode/field-notes.md Template
+### docs/field-notes.md Template
 
 ```markdown
 # Field Notes
 
 A living record of mistakes, unexpected failures, and operational traps encountered across the current project. The purpose is error prevention: every recorded failure must produce an actionable rule so future agents do not repeat it.
 
-──────────────────────────────────────────────────────────────
+---
 
 ## Agent Directives
 
@@ -36,9 +36,9 @@ A living record of mistakes, unexpected failures, and operational traps encounte
 Append a new note immediately when you encounter and resolve:
 
 1. **Tool / CLI Failures:** A command or tool failed due to incorrect assumptions, flags, or syntax.
-2. **Harness & Environment Quirks:** OpenCode / macOS / node differences vs Gemini / Claude / Codex harnesses.
+2. **Harness & Environment Quirks:** OS, runtime, or AI harness differences (OpenCode, Claude Code, Antigravity).
 3. **Wrong Assumptions:** An assumption about codebase structure, dependencies, or APIs was invalidated.
-4. **CI / Test Failures:** Non-obvious failures in `make lint test`, GitHub/GitLab actions, or test suites.
+4. **CI / Test Failures:** Non-obvious failures in lint, build, CI pipelines, or test suites.
 5. **User Corrections:** The user corrected a technical mistake or workflow violation.
 
 ### 3. Entry Guidelines
@@ -48,14 +48,14 @@ Append a new note immediately when you encounter and resolve:
 - **Rule Format:** The **Rule / Lesson** line must be an actionable, imperative constraint (e.g., "Always pass `-F` when...", "Never assume `X` exists; check with `Y` first").
 - **Supersession:** If a new finding contradicts an older note, add `- **Status:** SUPERSEDED by FN-XXX` to the older note header.
 
-──────────────────────────────────────────────────────────────
+---
 
 ## Schema
 
 ### FN-[NUMBER]: [Concise Title]
 
 - **Date:** YYYY-MM-DD
-- **Context:** [Extension name / Jira subtask / tooling area]
+- **Context:** [Module / issue / tooling area]
 - **Trigger / Error:** [Exact error message or description of what failed]
 - **Root Cause:** [Underlying technical reason]
 - **Resolution:** [Exact fix applied]
@@ -63,12 +63,10 @@ Append a new note immediately when you encounter and resolve:
 - **Tags:** `tag1`, `tag2`
 ```
 
-### AGENTS.md Section Template
+### Project Instructions Section Template (`AGENTS.md` / `CLAUDE.md`)
 
 ```markdown
 ## Field Notes
 
-@.opencode/field-notes.md
-
-**MANDATORY PROTOCOL:** All agents and subagents must read `.opencode/field-notes.md` before formulating plans or executing tasks. Active notes (FN-001, FN-002, etc.) must be applied to all subagent dispatches and implementations. Any new error or failure must be recorded immediately in `.opencode/field-notes.md`.
+**MANDATORY PROTOCOL:** All agents and subagents must read `docs/field-notes.md` (or `.opencode/field-notes.md` if present) before formulating plans or executing tasks. Active notes (FN-001, FN-002, etc.) must be applied to all subagent dispatches and implementations. Any new error or failure must be recorded immediately in the field-notes file.
 ```

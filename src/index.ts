@@ -106,7 +106,7 @@ export default Plugin.define({
         name: Skill.Name.make(frontmatterValue(fieldNotesContent.frontmatter, "name") ?? "field-notes"),
         description:
           frontmatterValue(fieldNotesContent.frontmatter, "description") ??
-          "Loads the read-before-planning and write-on-failure protocol for .opencode/field-notes.md.",
+          "Loads the read-before-planning and write-on-failure protocol for project field notes.",
         path: Skill.Info.fields.path.make(fieldNotesDir),
         content: fieldNotesContent.body,
       })

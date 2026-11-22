@@ -126,6 +126,6 @@ When all supplied steps are finished:
 
 ## Example assignments
 
-- `@contractor Walk through the attached SOP without executing it. Stop at the first unclear step.`
-- `@contractor Execute the steps in this ticket. Stop and ask whenever the instructions are insufficient.`
-- `@contractor Execute the approved plan and contract in factory/workspaces/<name>/contract.md.`
+- `"Walk through the attached SOP without executing it. Stop at the first unclear step."`
+- `"Execute the steps in this ticket. Stop and ask whenever the instructions are insufficient."`
+- `"Execute the approved plan and contract in factory/workspaces/<name>/contract.md."`
