@@ -184,6 +184,7 @@ In the same pass as every code change. A shipped feature with no documentation u
 - The README stays a short entry point: what the project is, setup, quick start, usage, tests, and links to deeper docs.
 - Deeper material lives in the docs directory, one topic per file, and is linked from the README.
 - Documentation changes are limited to what the change affected. Unrelated stale text is mentioned, not fixed unasked.
+- Prose in `README.md` and `docs/` follows the `antislop-copywriting` rules (load the skill when available): no em dashes, no empty AI buzzwords, no fabricated claims or numbers, and no filler phrases.
 - Ephemeral agent scratch material and unapproved plan drafts are not committed and not linked from the docs.
 - Scratch files under `docs/scratch-files/` follow the scratch-files lifecycle: promote testable behaviors to `.feature` files and architecture to `docs/`, mark the scratch file `Status: Implemented`, and retain it as design rationale. Scratch files with `Status: Draft` are not finalized documentation and are not committed.
 

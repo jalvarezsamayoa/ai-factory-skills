@@ -1,30 +1,25 @@
 # @jalvarezsamayoa/factory
 
-Agents, skills, tools, and real Markdown files for an AI software development
-factory. The factory moves a change through intake, challenge, contract, build,
-review, and ship, with independent reviewers and written artifacts at every
-gate.
+Portable agents, skills, tools, and Markdown definitions for running a structured software development workflow across OpenCode, Claude Code, and Antigravity.
 
 ## What is included
 
 | Item | Name | Purpose |
 | --- | --- | --- |
-| Skill | `factory` | The phase-by-phase workflow that coordinates the agents |
-| Skill | `bug-hunting` | Empirical, execution-backed bug hunting across the codebase |
-| Skill | `field-notes` | Read-before-planning & write-on-failure field notes protocol |
-| Skill | `scratch-files` | Isolated exploratory workspace for drafting notes and designs |
-| Skill | `worklog` | Coordinate work, todos, and tickets through uncommitted `worklog.org` |
-| Command | `/factory` | `help`, `workspace [name]`, `init [harness]` |
-| Tool | `factory` | Same actions, callable by the model |
-| Agent | `contrarian` | Challenges assumptions and argues for a safer or simpler plan |
-| Agent | `contractor` | Implements an approved plan and contract |
-| Agent | `software-reviewer` | Reviews correctness, regressions, maintainability, and tests |
-| Agent | `security-reviewer` | Reviews authn/authz, input handling, secrets, and dependencies |
-| Agent | `bug-hunter` | Reproduces failures, finds root causes, adds regression tests |
+| Skill | `factory` | Eight-gate development workflow coordinating planning, review, and verification |
+| Skill | `bug-hunting` | Execution-backed bug hunting with failing tests and a 7-question gate |
+| Skill | `field-notes` | Read-before-planning and write-on-failure protocol for project field notes |
+| Skill | `scratch-files` | Isolated workspace under `docs/scratch-files/` for pre-plan design drafts |
+| Skill | `worklog` | Cross-repo coordination and task tracking through an uncommitted `worklog.org` |
+| Command | `/factory` | Control plane for `help`, `workspace [name]`, and `init [harness]` |
+| Tool | `factory` | Same control actions exposed as a model-callable tool |
+| Agent | `contrarian` | Challenges assumptions and argues for simpler alternatives |
+| Agent | `contractor` | Pressure-tests procedures and contracts, stopping at the first gap |
+| Agent | `software-reviewer` | Reviews correctness, complexity, maintainability, and test coverage |
+| Agent | `security-reviewer` | Reviews authz boundaries, input handling, secrets, and dependencies |
+| Agent | `bug-hunter` | Proves defects with executable tests or reproduction scripts |
 
-The agent files, skill, and command are shipped as real files under `agents/`,
-`skills/`, and `commands/`, so the same content can be installed into OpenCode,
-Claude Code, and Antigravity.
+All agents, skills, and commands ship as real Markdown files under `agents/`, `skills/`, and `commands/` so the same definitions install into OpenCode, Claude Code, and Antigravity.
 
 ## Install
 
@@ -39,19 +34,15 @@ Add the package to the `plugins` array in `opencode.jsonc`:
 }
 ```
 
-The plugin registers the `factory` skill, the `/factory` command, and the
-`factory` tool automatically. OpenCode reloads plugins after a config save; use
-`/reload` if needed.
+The plugin registers all five skills, the `/factory` command, and the `factory` tool automatically. OpenCode reloads plugins after saving config; run `/reload` if needed.
 
-OpenCode plugins cannot create new agents through the plugin API. Install the
-agent files once with:
+OpenCode plugins cannot create new agents through the plugin API. Install the agent files once with:
 
 ```text
 /factory init
 ```
 
-That writes the five agents to `.opencode/agents/`. To install them
-automatically whenever the plugin loads, configure the option:
+This writes the five agent files to `.opencode/agents/`. To install them automatically whenever the plugin loads, set the `installAgents` option:
 
 ```jsonc
 {
@@ -64,7 +55,7 @@ automatically whenever the plugin loads, configure the option:
 }
 ```
 
-Use `"global"` to install into `~/.config/opencode/agents/`.
+Set `"global"` to install into `~/.config/opencode/agents/`.
 
 ### Claude Code
 
@@ -76,11 +67,11 @@ This writes:
 
 ```text
 .claude/agents/*.md
-.claude/skills/factory/SKILL.md
+.claude/skills/<skill>/SKILL.md
 .claude/commands/factory.md
 ```
 
-Use `--global` to install into `~/.claude/`.
+Pass `--global` to install into `~/.claude/`.
 
 ### Antigravity
 
@@ -88,17 +79,15 @@ Use `--global` to install into `~/.claude/`.
 npx @jalvarezsamayoa/factory init antigravity
 ```
 
-This installs the factory plugin bundle under `.agents/plugins/factory/`:
+This installs a native Antigravity plugin bundle under `.agents/plugins/factory/`:
 
 ```text
 .agents/plugins/factory/plugin.json
 .agents/plugins/factory/rules/AGENTS.md
-.agents/plugins/factory/skills/factory/SKILL.md
+.agents/plugins/factory/skills/<skill>/SKILL.md
 ```
 
-Use `--global` to install into `~/.gemini/config/plugins/factory/`. Antigravity
-automatically discovers the plugin, loads the subagent definitions from
-`rules/AGENTS.md`, and exposes the `factory` skill.
+Pass `--global` to install into `~/.gemini/config/plugins/factory/`. Antigravity discovers the plugin automatically, loads the subagent definitions from `rules/AGENTS.md`, and exposes all five skills.
 
 ### Every harness
 
@@ -108,13 +97,13 @@ npx @jalvarezsamayoa/factory init all
 
 ## Use
 
-Create a workspace for the change:
+Create a workspace for a change:
 
 ```text
 /factory workspace checkout-retry
 ```
 
-The workspace is created at `factory/workspaces/checkout-retry/`:
+This creates `factory/workspaces/checkout-retry/`:
 
 ```text
 factory/workspaces/checkout-retry/
@@ -128,26 +117,22 @@ factory/workspaces/checkout-retry/
 └── state.json
 ```
 
-Then follow the `factory` skill:
+Then run the eight quality gates defined in the `factory` skill:
 
-1. **Intake** — fill in `brief.md`.
-2. **Challenge** — ask the `contrarian` agent to attack the brief.
-3. **Contract** — write `plan.md` and `contract.md` with verifiable criteria.
-4. **Build** — delegate to the `contractor`.
-5. **Review** — run `software-reviewer` and `security-reviewer` independently.
-6. **Harden** — use `bug-hunter` for failures and regressions.
-7. **Ship** — verify the contract and close the workspace.
+1. Plan validation: write an ordered plan with verification checks, complexity budgets, and impact analysis.
+2. Contrarian pass: dispatch `contrarian` to challenge assumptions and cut avoidable complexity.
+3. Contractor pass: dispatch `contractor` to surface gaps or missing criteria before coding.
+4. Test-driven development: write failing tests first, then the minimum code to make them pass.
+5. Code review: dispatch `software-reviewer` to review the diff against the plan and complexity limits.
+6. Security review: dispatch `security-reviewer` to check trust boundaries, data handling, and secrets.
+7. Documentation audit: update `README.md` and `docs/` in the same pass as the code.
+8. Verification before completion: run the full test suite, linter, typecheck, and build before claiming completion.
 
-Show the command reference at any time:
-
-```text
-/factory help
-```
+Print the command reference at any time with `/factory help`.
 
 ## CLI
 
-The package also ships a `factory` binary for harnesses that do not load the
-OpenCode plugin:
+The package ships a `factory` binary for harnesses that do not load the OpenCode plugin:
 
 ```bash
 npx @jalvarezsamayoa/factory help
@@ -158,24 +143,24 @@ npx @jalvarezsamayoa/factory init all --force
 
 Flags:
 
-- `--global`, `-g` — target the user config instead of the project.
-- `--force`, `-f` — overwrite files that differ from the packaged version.
-- `--harness`, `-H` — choose `opencode`, `claude`, `antigravity`, or `all`.
+- `--global`, `-g`: target user config instead of the current project.
+- `--force`, `-f`: overwrite files that differ from the packaged version.
+- `--harness`, `-H`: choose `opencode`, `claude`, `antigravity`, or `all`.
 
-Without `--force`, existing files that differ are skipped so user edits are not
-lost.
+Without `--force`, existing files that differ from the packaged version are skipped so local edits are preserved.
 
 ## Repository layout
 
 ```text
 agents/                     Portable agent definitions
-skills/factory/SKILL.md     Factory workflow
+skills/                     Skills (factory, bug-hunting, field-notes, scratch-files, worklog)
 commands/factory.md         Control-plane command for file-based harnesses
 src/index.ts                OpenCode plugin entrypoint
 src/factory.ts              Shared actions and argument parsing
 src/install.ts              Harness discovery paths and installer
 src/workspace.ts            Workspace templates
 src/cli.ts                  `factory` binary
+test/factory.test.js        Unit tests
 ```
 
 ## Development
@@ -184,9 +169,10 @@ src/cli.ts                  `factory` binary
 npm install
 npm run typecheck
 npm run build
+npm test
 ```
 
-Test the plugin locally by pointing OpenCode at a checkout:
+Test the OpenCode plugin locally by pointing `opencode.jsonc` at your checkout:
 
 ```jsonc
 {
@@ -194,15 +180,9 @@ Test the plugin locally by pointing OpenCode at a checkout:
 }
 ```
 
-Or copy this repository into a test project's `.opencode/plugins/factory/` and
-run `opencode debug agents` there.
+Or copy the repository into a test project's `.opencode/plugins/factory/` and run `opencode debug agents`.
 
 ## Notes
 
-- Agent IDs are `contrarian`, `contractor`, `software-reviewer`,
-  `security-reviewer`, and `bug-hunter`. The original request used the
-  misspellings `software-reviwer` and `security-reviwer`; the shipped IDs use
-  the standard spelling.
-- OpenCode's agent transform can update or remove discovered agents but cannot
-  add new ones. The installer is the supported path for shipping new agents.
+- OpenCode's agent transform can update or remove discovered agents but cannot register new ones. Installing the agent files via `/factory init` or `installAgents` is the supported path.
 - The OpenCode plugin uses the V2 plugin API (`Plugin.define` with `setup`).

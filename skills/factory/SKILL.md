@@ -116,6 +116,8 @@ Update the README and the docs in the same pass as the code. A shipped feature w
 
 Before you write any documentation, read the code it describes. Every command, path, flag, environment variable, and API you name in the docs must exist in the repository. Correct or delete any text that your change made false. When code and docs disagree, the code wins and the docs change.
 
+When writing or editing prose under `docs/` or `README.md`, apply the `antislop-copywriting` skill (when available) so documentation reads naturally and plainly: no em dashes, no AI buzzwords, no fabricated claims or numbers, and no filler phrases.
+
 If the change needs no documentation update, say so and give the reason. Do not leave this gate blank.
 
 ## Gate 8: Verification Before Completion
