@@ -188,7 +188,7 @@ Or copy the repository into a test project's `.opencode/plugins/factory/` and ru
 
 Commit messages follow Conventional Commits (`fix:` for patch, `feat:` for minor, `BREAKING CHANGE:` for major).
 
-To enable publishing in GitHub Actions, add an `NPM_TOKEN` repository secret (or configure npm Trusted Publishing for this repository).
+Publishing uses npm OIDC Trusted Publishing (`id-token: write`, no `NPM_TOKEN` secret required). Configure Trusted Publishing on npmjs.com for `jalvarezsamayoa/ai-factory-skills` pointing to `release.yml`.
 
 ## Notes
 
