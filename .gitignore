@@ -155,3 +155,14 @@ vite.config.ts.timestamp-*
 .nx/cache
 .nx/workspace-data
 .nx/migrate-runs
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.code-workspace
+
