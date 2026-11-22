@@ -182,6 +182,14 @@ Test the OpenCode plugin locally by pointing `opencode.jsonc` at your checkout:
 
 Or copy the repository into a test project's `.opencode/plugins/factory/` and run `opencode debug agents`.
 
+## Releases
+
+`.github/workflows/release.yml` runs typecheck, build, and tests on every branch and pull request. When tests pass on `main`, the `release` job runs `semantic-release` to bump the version, update `CHANGELOG.md`, commit the release assets back to `main`, create a GitHub Release, and publish to npm.
+
+Commit messages follow Conventional Commits (`fix:` for patch, `feat:` for minor, `BREAKING CHANGE:` for major).
+
+To enable publishing in GitHub Actions, add an `NPM_TOKEN` repository secret (or configure npm Trusted Publishing for this repository).
+
 ## Notes
 
 - OpenCode's agent transform can update or remove discovered agents but cannot register new ones. Installing the agent files via `/factory init` or `installAgents` is the supported path.
