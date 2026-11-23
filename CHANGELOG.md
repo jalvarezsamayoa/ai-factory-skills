@@ -1,3 +1,10 @@
+## [0.1.4](https://github.com/jalvarezsamayoa/ai-factory-skills/compare/v0.1.3...v0.1.4) (2026-11-23)
+
+
+### Bug Fixes
+
+* install native Antigravity subagents ([de1f00a](https://github.com/jalvarezsamayoa/ai-factory-skills/commit/de1f00ac16edcf2a49c951ecacc70285f0d62b4e)), closes [#3](https://github.com/jalvarezsamayoa/ai-factory-skills/issues/3)
+
 ## [0.1.3](https://github.com/jalvarezsamayoa/ai-factory-skills/compare/v0.1.2...v0.1.3) (2026-11-23)
 
 
