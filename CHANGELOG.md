@@ -1,3 +1,10 @@
+## [0.1.3](https://github.com/jalvarezsamayoa/ai-factory-skills/compare/v0.1.2...v0.1.3) (2026-11-23)
+
+
+### Bug Fixes
+
+* bundle deterministic scaffolding scripts ([d1dad5b](https://github.com/jalvarezsamayoa/ai-factory-skills/commit/d1dad5b6f1b4e9dd84391f47cc32e9a784cf831c)), closes [#2](https://github.com/jalvarezsamayoa/ai-factory-skills/issues/2)
+
 ## [0.1.2](https://github.com/jalvarezsamayoa/ai-factory-skills/compare/v0.1.1...v0.1.2) (2026-11-23)
 
 
