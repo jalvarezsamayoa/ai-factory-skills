@@ -4,16 +4,13 @@ Reference procedure and canonical templates for initializing the factory instruc
 
 ## Procedure
 
-1. When `factory init` is invoked to bootstrap project instructions, check whether `AGENTS.md` or `CLAUDE.md` exists at the repository root (prefer `AGENTS.md` if neither exists, or update the existing file).
-2. Ask the user for confirmation before creating or modifying the instructions file.
-3. Locate the managed factory block delineated by:
-   ```markdown
-   <!-- factory:begin -->
-   ...
-   <!-- factory:end -->
-   ```
-4. If the managed block exists, refresh it with the canonical template below while preserving all user-customized sections outside the block.
-5. If the managed block is missing, append it to the instructions file.
+1. Ask the user for confirmation before creating or modifying the instructions file (`AGENTS.md` or `CLAUDE.md`).
+2. **Preferred (bundled deterministic script):** Run `bash <skill-dir>/scripts/init.sh` (pass `--file CLAUDE.md` if targeting `CLAUDE.md` explicitly, or `--workspace <name>` to set Project Context).
+3. **Manual fallback (only if the script is unavailable):**
+   - Check whether `AGENTS.md` or `CLAUDE.md` exists at the repository root (prefer `AGENTS.md` if neither exists, or update the existing file).
+   - Locate the managed factory block delineated by `<!-- factory:begin -->` and `<!-- factory:end -->`.
+   - If the managed block exists, refresh it with the canonical template below while preserving all user-customized sections outside the block.
+   - If the managed block is missing, append it to the instructions file.
 
 ## Canonical Managed Block Template
 

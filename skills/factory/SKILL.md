@@ -16,8 +16,8 @@ Read `references/gates.md` for the per-gate checklists. Read it before you start
 The skill accepts optional arguments. When the invoking message specifies one, follow that mode instead of the gate sequence. Help, init, and workspace are one-shot utility requests, not development tasks. Never run the gate sequence for them.
 
 - `help` — Print the purpose paragraph, the gate-sequence table, the four-agents table, and this Arguments section, then stop. Do not run the gates.
-- `init` — Read `references/init.md` and follow it to bootstrap or refresh the project's instructions file (`AGENTS.md` or `CLAUDE.md`). If that file is missing or unreadable, say so and stop. If the invoking message contains extra text besides `init`, treat that text as context.
-- `workspace [workspace_id]` — Read `references/workspace.md` and follow it to scaffold `<cwd>/<workspace_id>/` with `AGENTS.md`, `worklog.org`, empty `.envrc` and `.tool-versions`, `docs/backlog/README.md`, `docs/scratch-files/`, `repos/`, `tmp/`, and `<harness-dir>/field-notes.md`.
+- `init` — Ask the user for confirmation, then run the bundled deterministic script `bash <skill-dir>/scripts/init.sh` (where `<skill-dir>` is the directory containing this `SKILL.md`). Do not read `references/init.md` or transcribe templates manually unless the script is unavailable.
+- `workspace [workspace_id]` — Run the bundled deterministic script `bash <skill-dir>/scripts/workspace.sh <workspace_id> --harness <harness>` (where `<skill-dir>` is the directory containing this `SKILL.md` and `<harness>` is `opencode`, `claude`, or `antigravity`). This scaffolds `<cwd>/<workspace_id>/` in one command with zero manual file transcription. Do not read `references/workspace.md`, `references/init.md`, `worklog/references/init.md`, or `field-notes/references/init.md` unless the script is unavailable.
 - Any other invocation — Run the gate sequence as documented below.
 
 ## Core Directives

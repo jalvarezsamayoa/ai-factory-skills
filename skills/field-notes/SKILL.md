@@ -21,11 +21,9 @@ Resolve the field-notes file path in this order:
 
 If no field-notes file exists yet:
 
-- If your harness provides a dedicated `field-notes` tool or command, run it.
-- Otherwise, read `references/init.md` and follow the manual initialization procedure using the canonical templates.
-
-**Mandatory User Consent Protocol:**
-Before initializing, always inform the user of the planned changes (creating `<harness-dir>/field-notes.md` with the canonical schema and adding the `## Field Notes` protocol section to the project's instructions file such as `AGENTS.md` or `CLAUDE.md`), and ask the user for explicit permission to proceed. If the user does not consent, stop immediately without making changes. Initialization is idempotent; safe to run repeatedly.
+1. **Mandatory User Consent Protocol:** Inform the user of the planned changes (creating `<harness-dir>/field-notes.md` with the canonical schema and adding the `## Field Notes` protocol section to the project's instructions file such as `AGENTS.md` or `CLAUDE.md`), and ask for explicit permission to proceed. If denied, stop without making changes.
+2. **Preferred (bundled deterministic script):** Run `bash <skill-dir>/scripts/init.sh --harness <harness>` (where `<skill-dir>` is the directory containing this `SKILL.md` and `<harness>` is `opencode`, `claude`, or `antigravity`).
+3. **Fallback:** If a dedicated `field-notes` tool is available, run it; otherwise read `references/init.md` and initialize manually. Initialization is idempotent.
 
 ## Read Protocol (before planning)
 

@@ -11,10 +11,9 @@ Coordinate multi-repo or single-repo work, personal todos, topic backlogs, and i
 
 If `worklog.org` does not exist at the workspace root:
 
-- If your harness provides a dedicated `worklog` tool or command, run it.
-- Otherwise, read `references/init.md` and follow the manual initialization procedure using the canonical templates.
-
-**Mandatory User Consent Protocol:** Before initializing, inform the user of the planned file changes (`worklog.org`, `docs/backlog/README.md`, appending `## Worklog Protocol (Mission Control)` to the project's instructions file such as `AGENTS.md` or `CLAUDE.md`, and adding `worklog.org` to `.gitignore` if inside a git repository), then ask the user for explicit permission. If denied, stop without modifying any files. Initialization is idempotent.
+1. **Mandatory User Consent Protocol:** Inform the user of the planned file changes (`worklog.org`, `docs/backlog/README.md`, appending `## Worklog Protocol (Mission Control)` to the project's instructions file such as `AGENTS.md` or `CLAUDE.md`, and adding `worklog.org` to `.gitignore` if inside a git repository), then ask for explicit permission. If denied, stop without modifying any files.
+2. **Preferred (bundled deterministic script):** Run `bash <skill-dir>/scripts/init.sh` (where `<skill-dir>` is the directory containing this `SKILL.md`).
+3. **Fallback:** If a dedicated `worklog` tool is available, run it; otherwise read `references/init.md` and initialize manually. Initialization is idempotent.
 
 ## Standup, Todos, and "Remind Me What I Was Working On"
 

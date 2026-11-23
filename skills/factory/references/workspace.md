@@ -26,8 +26,9 @@ Choose `<harness-dir>` for `field-notes.md` based on the active AI harness:
 
 ### 3. Scaffold Workspace
 
+- **Preferred (bundled deterministic script, zero network):** Run `bash <skill-dir>/scripts/workspace.sh <workspace_id> --harness <harness>` (where `<skill-dir>` is the directory containing `skills/factory/SKILL.md`).
 - **If the `factory` tool or CLI is available:** Call `factory({ action: "workspace", name: "<workspace_id>", harness: "<harness>" })` (or run `npx @jalvarezsamayoa/factory workspace <workspace_id> --harness <harness>`).
-- **If running manually:** Create `<cwd>/<workspace_id>/` directly under the current working directory (not inside `factory/workspaces/`):
+- **Manual fallback (only if neither script nor tool is available):** Create `<cwd>/<workspace_id>/` directly under the current working directory (not inside `factory/workspaces/`):
   1. Create directories:
      - `<workspace_id>/`
      - `<workspace_id>/docs/`

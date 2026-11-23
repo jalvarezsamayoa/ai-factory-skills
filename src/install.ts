@@ -103,12 +103,13 @@ export async function installFactory(options: InstallOptions): Promise<InstallRe
     if (harness === "antigravity") {
       if (kinds.includes("plugin") && paths.plugin) {
         // Install complete Antigravity plugin bundle:
-        // plugin.json, skills/factory/SKILL.md, rules/AGENTS.md
+        // plugin.json, skills/*, rules/AGENTS.md
+        const version = await readPackageVersion(sourceRoot)
         const pluginJsonContent = JSON.stringify(
           {
             name: "factory",
             description: "Factory workflow, subagents, and tools for AI-driven software development",
-            version: "0.1.0",
+            version,
           },
           null,
           2,
@@ -453,4 +454,14 @@ async function listMarkdown(dir: string): Promise<string[]> {
     .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
     .map((entry) => entry.name)
     .sort()
+}
+
+async function readPackageVersion(sourceRoot: string): Promise<string> {
+  try {
+    const raw = await readFile(join(sourceRoot, "package.json"), "utf8")
+    const parsed = JSON.parse(raw) as { version?: unknown }
+    return typeof parsed.version === "string" && parsed.version.length > 0 ? parsed.version : "0.1.0"
+  } catch {
+    return "0.1.0"
+  }
 }

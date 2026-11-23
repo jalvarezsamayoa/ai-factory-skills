@@ -1,11 +1,16 @@
 import test from "node:test"
 import assert from "node:assert/strict"
-import { mkdtemp, rm, readdir, readFile } from "node:fs/promises"
+import { execFile } from "node:child_process"
+import { promisify } from "node:util"
+import { mkdtemp, mkdir, rm, readdir, readFile, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { join, resolve } from "node:path"
 import { parseFactoryArgs, runFactoryAction } from "../dist/factory.js"
 import { createWorkspace } from "../dist/workspace.js"
 import { installFactory } from "../dist/install.js"
+
+const execFileAsync = promisify(execFile)
+const REPO_ROOT = resolve(import.meta.dirname, "..")
 
 test("parseFactoryArgs handles subcommands and options", () => {
   assert.deepEqual(parseFactoryArgs("help"), {
@@ -132,11 +137,17 @@ test("installFactory installs to target harnesses correctly", async () => {
     const agyPluginFiles = await readdir(agyPluginDir)
     assert.ok(agyPluginFiles.includes("plugin.json"))
 
+    const pkgJson = JSON.parse(await readFile(join(REPO_ROOT, "package.json"), "utf8"))
     const pluginJson = JSON.parse(await readFile(join(agyPluginDir, "plugin.json"), "utf8"))
     assert.equal(pluginJson.name, "factory")
+    assert.equal(pluginJson.version, pkgJson.version)
 
     const agySkills = await readdir(join(agyPluginDir, "skills/factory"))
     assert.ok(agySkills.includes("SKILL.md"))
+    assert.ok(agySkills.includes("scripts"))
+    const agyFactoryScripts = await readdir(join(agyPluginDir, "skills/factory/scripts"))
+    assert.ok(agyFactoryScripts.includes("workspace.sh"))
+    assert.ok(agyFactoryScripts.includes("init.sh"))
 
     const agyBugHunting = await readdir(join(agyPluginDir, "skills/bug-hunting"))
     assert.ok(agyBugHunting.includes("SKILL.md"))
@@ -168,6 +179,71 @@ test("installFactory installs to target harnesses correctly", async () => {
     assert.match(agyRules, /## Agent: software-reviewer/)
     assert.match(agyRules, /## Agent: security-reviewer/)
     assert.match(agyRules, /## Agent: bug-hunter/)
+  } finally {
+    await rm(tempDir, { recursive: true, force: true })
+  }
+})
+
+test("bundled shell scripts scaffold workspace, factory init, field-notes, and worklog", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "factory-test-scripts-"))
+  try {
+    const workspaceScript = join(REPO_ROOT, "skills/factory/scripts/workspace.sh")
+    await execFileAsync("bash", [workspaceScript, "Fibonacci", "--harness", "antigravity"], {
+      cwd: tempDir,
+    })
+
+    const wsDir = join(tempDir, "Fibonacci")
+    const entries = await readdir(wsDir)
+    assert.ok(entries.includes("AGENTS.md"))
+    assert.ok(entries.includes("worklog.org"))
+    assert.ok(entries.includes(".envrc"))
+    assert.ok(entries.includes(".tool-versions"))
+    assert.ok(entries.includes("docs"))
+    assert.ok(entries.includes("repos"))
+    assert.ok(entries.includes("tmp"))
+    assert.ok(entries.includes(".agents"))
+
+    const docsEntries = await readdir(join(wsDir, "docs"))
+    assert.ok(docsEntries.includes("backlog"))
+    assert.ok(docsEntries.includes("scratch-files"))
+    assert.ok(!docsEntries.includes("confluence"))
+
+    assert.equal(await readFile(join(wsDir, ".envrc"), "utf8"), "")
+    assert.equal(await readFile(join(wsDir, ".tool-versions"), "utf8"), "")
+    assert.match(await readFile(join(wsDir, ".agents/field-notes.md"), "utf8"), /# Field Notes/)
+    assert.match(await readFile(join(wsDir, "AGENTS.md"), "utf8"), /<!-- factory:begin -->/)
+
+    // Reject path traversal
+    await assert.rejects(() =>
+      execFileAsync("bash", [workspaceScript, "../escape"], { cwd: tempDir }),
+    )
+
+    // Test factory init.sh preserves custom content and refreshes managed block
+    const initDir = join(tempDir, "init-test")
+    await mkdir(initDir, { recursive: true })
+    await writeFile(join(initDir, "AGENTS.md"), "# Custom Header\n\nKeep me.\n", "utf8")
+    const factoryInitScript = join(REPO_ROOT, "skills/factory/scripts/init.sh")
+    await execFileAsync("bash", [factoryInitScript, "--workspace", "demo"], { cwd: initDir })
+    const afterInit = await readFile(join(initDir, "AGENTS.md"), "utf8")
+    assert.match(afterInit, /# Custom Header/)
+    assert.match(afterInit, /Keep me\./)
+    assert.match(afterInit, /<!-- factory:begin -->/)
+    assert.match(afterInit, /demo/)
+
+    // Test field-notes init.sh
+    const fieldNotesScript = join(REPO_ROOT, "skills/field-notes/scripts/init.sh")
+    await execFileAsync("bash", [fieldNotesScript, "--harness", "claude"], { cwd: initDir })
+    assert.match(await readFile(join(initDir, ".claude/field-notes.md"), "utf8"), /# Field Notes/)
+    assert.match(await readFile(join(initDir, "AGENTS.md"), "utf8"), /## Field Notes/)
+
+    // Test worklog init.sh (with .git present to verify .gitignore update)
+    await mkdir(join(initDir, ".git"), { recursive: true })
+    const worklogScript = join(REPO_ROOT, "skills/worklog/scripts/init.sh")
+    await execFileAsync("bash", [worklogScript], { cwd: initDir })
+    assert.match(await readFile(join(initDir, "worklog.org"), "utf8"), /\* Queue/)
+    assert.match(await readFile(join(initDir, "docs/backlog/README.md"), "utf8"), /Topic Backlogs/)
+    assert.match(await readFile(join(initDir, ".gitignore"), "utf8"), /^worklog\.org$/m)
+    assert.match(await readFile(join(initDir, "AGENTS.md"), "utf8"), /## Worklog Protocol/)
   } finally {
     await rm(tempDir, { recursive: true, force: true })
   }
