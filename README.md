@@ -83,11 +83,11 @@ This installs a native Antigravity plugin bundle under `.agents/plugins/factory/
 
 ```text
 .agents/plugins/factory/plugin.json
-.agents/plugins/factory/rules/AGENTS.md
+.agents/plugins/factory/agents/*.md
 .agents/plugins/factory/skills/<skill>/SKILL.md
 ```
 
-Pass `--global` to install into `~/.gemini/config/plugins/factory/`. Antigravity discovers the plugin automatically, loads the subagent definitions from `rules/AGENTS.md`, and exposes all five skills.
+Pass `--global` to install into `~/.gemini/config/plugins/factory/`. Antigravity discovers the plugin automatically, registers all five subagents from `agents/*.md`, and exposes all five skills.
 
 ### Every harness
 

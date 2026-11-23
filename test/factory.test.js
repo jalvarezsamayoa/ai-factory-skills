@@ -136,6 +136,15 @@ test("installFactory installs to target harnesses correctly", async () => {
     const agyPluginDir = join(tempDir, ".agents/plugins/factory")
     const agyPluginFiles = await readdir(agyPluginDir)
     assert.ok(agyPluginFiles.includes("plugin.json"))
+    assert.ok(agyPluginFiles.includes("agents"))
+    assert.ok(!agyPluginFiles.includes("rules"))
+
+    const agyAgents = await readdir(join(agyPluginDir, "agents"))
+    assert.ok(agyAgents.includes("contrarian.md"))
+    assert.ok(agyAgents.includes("contractor.md"))
+    assert.ok(agyAgents.includes("software-reviewer.md"))
+    assert.ok(agyAgents.includes("security-reviewer.md"))
+    assert.ok(agyAgents.includes("bug-hunter.md"))
 
     const pkgJson = JSON.parse(await readFile(join(REPO_ROOT, "package.json"), "utf8"))
     const pluginJson = JSON.parse(await readFile(join(agyPluginDir, "plugin.json"), "utf8"))
@@ -173,12 +182,11 @@ test("installFactory installs to target harnesses correctly", async () => {
     const ocWorklog = await readdir(join(tempDir, ".opencode/skills/worklog"))
     assert.ok(ocWorklog.includes("SKILL.md"))
 
-    const agyRules = await readFile(join(agyPluginDir, "rules/AGENTS.md"), "utf8")
-    assert.match(agyRules, /## Agent: contrarian/)
-    assert.match(agyRules, /## Agent: contractor/)
-    assert.match(agyRules, /## Agent: software-reviewer/)
-    assert.match(agyRules, /## Agent: security-reviewer/)
-    assert.match(agyRules, /## Agent: bug-hunter/)
+    // Verify legacy auto-generated rules/AGENTS.md is cleaned up on reinstall
+    await mkdir(join(agyPluginDir, "rules"), { recursive: true })
+    await writeFile(join(agyPluginDir, "rules/AGENTS.md"), "# Factory Subagents & Rules\nlegacy\n", "utf8")
+    await installFactory({ harnesses: ["antigravity"], target: tempDir, force: true })
+    assert.ok(!(await readdir(agyPluginDir)).includes("rules"))
   } finally {
     await rm(tempDir, { recursive: true, force: true })
   }

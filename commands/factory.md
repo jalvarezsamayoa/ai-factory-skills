@@ -24,7 +24,7 @@ If the `factory` tool is not available, perform the same work directly:
    `commands/factory.md` into the harness's discovery folders:
    - OpenCode: `.opencode/agents`, `.opencode/skills`, `.opencode/commands`
    - Claude Code: `.claude/agents`, `.claude/skills`, `.claude/commands`
-   - Antigravity: `.agents/plugins/factory` (bundle containing `plugin.json`, `rules/AGENTS.md`, and `skills/*`)
+   - Antigravity: `.agents/plugins/factory` (bundle containing `plugin.json`, `agents/*.md`, and `skills/*`)
 
 Never overwrite a file the user has edited unless the arguments include
 `--force`. Report every file created, updated, skipped, or unchanged.

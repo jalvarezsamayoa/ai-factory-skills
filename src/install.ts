@@ -1,4 +1,4 @@
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises"
+import { mkdir, readFile, readdir, rm, rmdir, writeFile } from "node:fs/promises"
 import { homedir } from "node:os"
 import { dirname, join, relative, resolve } from "node:path"
 import { AGENTS_DIR, COMMANDS_DIR, SKILLS_DIR } from "./content.js"
@@ -25,10 +25,8 @@ export interface HarnessTargets {
  *
  * - OpenCode: `.opencode/{agents,skills,commands}` and `~/.config/opencode/...`
  * - Claude Code: `.claude/{agents,skills,commands}` and `~/.claude/...`
- * - Antigravity: `.agents/skills/`, `.agents/rules/`, and `.agents/plugins/factory`
- *   (or `~/.gemini/config/...` for global).
- *   Antigravity discovers skills under `skills/`, contextual rules under `rules/AGENTS.md`,
- *   or bundled as a full plugin with `plugin.json`.
+ * - Antigravity: `.agents/plugins/factory/` (bundle containing `plugin.json`, `agents/*.md`,
+ *   and `skills/*`), or `~/.gemini/config/plugins/factory/` for global.
  */
 export const HARNESSES: Record<Harness, HarnessTargets> = {
   opencode: {
@@ -57,13 +55,13 @@ export const HARNESSES: Record<Harness, HarnessTargets> = {
   },
   antigravity: {
     project: {
+      agents: ".agents/agents",
       skills: ".agents/skills",
-      rules: ".agents/rules",
       plugin: ".agents/plugins/factory",
     },
     global: {
+      agents: ".gemini/config/agents",
       skills: ".gemini/config/skills",
-      rules: ".gemini/config/rules",
       plugin: ".gemini/config/plugins/factory",
     },
   },
@@ -176,18 +174,34 @@ export async function installFactory(options: InstallOptions): Promise<InstallRe
           )),
         )
 
-        const compiledAgentsRule = await buildAntigravityAgentsRule(join(sourceRoot, "agents"))
-        results.push(
-          await writeContentResult(
-            harness,
-            "rules",
-            "agents/AGENTS.md",
-            join(target, paths.plugin, "rules", "AGENTS.md"),
-            compiledAgentsRule,
-            options.force === true,
-          ),
-        )
+        for (const file of await listMarkdown(join(sourceRoot, "agents"))) {
+          results.push(
+            await copyFile(
+              harness,
+              "agents",
+              join(sourceRoot, "agents", file),
+              join(target, paths.plugin, "agents", file),
+              options.force === true,
+            ),
+          )
+        }
+
+        await removeLegacyGeneratedAgentsRule(join(target, paths.plugin, "rules"))
       } else {
+        if (kinds.includes("agents") && paths.agents) {
+          for (const file of await listMarkdown(join(sourceRoot, "agents"))) {
+            results.push(
+              await copyFile(
+                harness,
+                "agents",
+                join(sourceRoot, "agents", file),
+                join(target, paths.agents, file),
+                options.force === true,
+              ),
+            )
+          }
+        }
+
         if (kinds.includes("skills")) {
           results.push(
             ...(await copyTree(
@@ -233,20 +247,6 @@ export async function installFactory(options: InstallOptions): Promise<InstallRe
               join(target, paths.skills, "worklog"),
               options.force === true,
             )),
-          )
-        }
-
-        if (kinds.includes("rules") && paths.rules) {
-          const compiledAgentsRule = await buildAntigravityAgentsRule(join(sourceRoot, "agents"))
-          results.push(
-            await writeContentResult(
-              harness,
-              "rules",
-              "agents/AGENTS.md",
-              join(target, paths.rules, "AGENTS.md"),
-              compiledAgentsRule,
-              options.force === true,
-            ),
           )
         }
       }
@@ -408,27 +408,19 @@ async function writeContentResult(
   return { harness, kind, source, target, status }
 }
 
-async function buildAntigravityAgentsRule(agentsDir: string): Promise<string> {
-  const files = await listMarkdown(agentsDir)
-  const sections: string[] = [
-    "# Factory Subagents & Rules",
-    "",
-    "This rule defines the personas, capabilities, and behavioral rules for",
-    "the factory subagents when coordinating work under the factory workflow.",
-    "",
-  ]
-
-  for (const file of files) {
-    const filePath = join(agentsDir, file)
-    const raw = await readFile(filePath, "utf8")
-    const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
-    const body = match && match[2] ? match[2].trim() : raw.trim()
-    const name = file.replace(/\.md$/, "")
-
-    sections.push(`## Agent: ${name}`, "", body, "")
+async function removeLegacyGeneratedAgentsRule(rulesDir: string): Promise<void> {
+  const legacyFile = join(rulesDir, "AGENTS.md")
+  try {
+    const content = await readFile(legacyFile, "utf8")
+    if (!content.startsWith("# Factory Subagents & Rules")) return
+    await rm(legacyFile)
+    const remaining = await readdir(rulesDir)
+    if (remaining.length === 0) {
+      await rmdir(rulesDir)
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
   }
-
-  return sections.join("\n").trimEnd() + "\n"
 }
 
 async function writeIfChanged(target: string, content: string, force: boolean): Promise<WriteStatus> {

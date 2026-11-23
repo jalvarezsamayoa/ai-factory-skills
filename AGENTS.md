@@ -45,7 +45,7 @@ npm pack --dry-run  # inspect files included in the published npm tarball
 ### Adding or Updating an Agent
 
 1. Create or edit `agents/<name>.md` with YAML frontmatter (`name`, `description`, `mode`, and `permissions` when read-only).
-2. `src/install.ts` automatically discovers all `agents/*.md` files for OpenCode, Claude Code, and Antigravity's compiled `rules/AGENTS.md`.
+2. `src/install.ts` automatically discovers all `agents/*.md` files for OpenCode, Claude Code, and Antigravity (`plugins/factory/agents/*.md`).
 3. Add assertions in `test/factory.test.js` and update `README.md`.
 
 ## Portability and Content Rules
