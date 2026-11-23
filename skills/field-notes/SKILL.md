@@ -11,8 +11,11 @@ Implements the field-notes pattern for this project. Field Notes are a living re
 
 Resolve the field-notes file path in this order:
 
-1. **Existing File Wins:** If `docs/field-notes.md` or `.opencode/field-notes.md` already exists in the repository, use that file.
-2. **Default:** Otherwise, use `docs/field-notes.md`.
+1. **Existing File Wins:** If `.opencode/field-notes.md`, `.claude/field-notes.md`, `.agents/field-notes.md`, or `docs/field-notes.md` already exists in the repository, use that file.
+2. **Default by Harness:** Otherwise, place `field-notes.md` under your harness's hidden directory:
+   - OpenCode: `.opencode/field-notes.md`
+   - Claude Code: `.claude/field-notes.md`
+   - Antigravity: `.agents/field-notes.md`
 
 ## Initialize
 
@@ -22,13 +25,13 @@ If no field-notes file exists yet:
 - Otherwise, read `references/init.md` and follow the manual initialization procedure using the canonical templates.
 
 **Mandatory User Consent Protocol:**
-Before initializing, always inform the user of the planned changes (creating `docs/field-notes.md` with the canonical schema and adding the `## Field Notes` protocol section to the project's instructions file such as `AGENTS.md` or `CLAUDE.md`), and ask the user for explicit permission to proceed. If the user does not consent, stop immediately without making changes. Initialization is idempotent — safe to run repeatedly.
+Before initializing, always inform the user of the planned changes (creating `<harness-dir>/field-notes.md` with the canonical schema and adding the `## Field Notes` protocol section to the project's instructions file such as `AGENTS.md` or `CLAUDE.md`), and ask the user for explicit permission to proceed. If the user does not consent, stop immediately without making changes. Initialization is idempotent; safe to run repeatedly.
 
 ## Read Protocol (before planning)
 
 Before formulating any plan or executing any multi-step task:
 
-1. Read the project's field-notes file (`docs/field-notes.md`, or `.opencode/field-notes.md` if present).
+1. Read the project's field-notes file (`<harness-dir>/field-notes.md`).
 2. Check each note's tags and rule against the current task context.
 3. In your plan, either:
    - Explicitly cite applicable notes (e.g., `Field Notes: FN-001 applies`), or

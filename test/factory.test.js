@@ -41,16 +41,67 @@ test("parseFactoryArgs handles subcommands and options", () => {
   })
 })
 
-test("createWorkspace generates required templates", async () => {
+test("createWorkspace scaffolds <cwd>/<workspace_id>/ layout", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "factory-test-ws-"))
   try {
-    const res = await createWorkspace({ target: tempDir, name: "payment-flow" })
-    assert.match(res.directory, /payment-flow$/)
-    const files = await readdir(res.directory)
-    assert.ok(files.includes("brief.md"))
-    assert.ok(files.includes("plan.md"))
-    assert.ok(files.includes("contract.md"))
-    assert.ok(files.includes("state.json"))
+    const res = await createWorkspace({ target: tempDir, name: "JIRA-123", harness: "antigravity" })
+    assert.equal(res.directory, join(tempDir, "JIRA-123"))
+
+    const rootEntries = await readdir(res.directory)
+    assert.ok(rootEntries.includes("AGENTS.md"))
+    assert.ok(rootEntries.includes("worklog.org"))
+    assert.ok(rootEntries.includes(".envrc"))
+    assert.ok(rootEntries.includes(".tool-versions"))
+    assert.ok(rootEntries.includes("docs"))
+    assert.ok(rootEntries.includes("repos"))
+    assert.ok(rootEntries.includes("tmp"))
+    assert.ok(rootEntries.includes(".agents"))
+
+    const docsEntries = await readdir(join(res.directory, "docs"))
+    assert.ok(docsEntries.includes("backlog"))
+    assert.ok(docsEntries.includes("scratch-files"))
+    assert.ok(!docsEntries.includes("confluence"))
+
+    const backlogEntries = await readdir(join(res.directory, "docs", "backlog"))
+    assert.ok(backlogEntries.includes("README.md"))
+
+    const fieldNotes = await readFile(join(res.directory, ".agents", "field-notes.md"), "utf8")
+    assert.match(fieldNotes, /# Field Notes/)
+    assert.match(fieldNotes, /FN-\[NUMBER\]/)
+
+    assert.equal(await readFile(join(res.directory, ".envrc"), "utf8"), "")
+    assert.equal(await readFile(join(res.directory, ".tool-versions"), "utf8"), "")
+
+    const agentsMd = await readFile(join(res.directory, "AGENTS.md"), "utf8")
+    assert.match(agentsMd, /^# JIRA-123/m)
+    assert.match(agentsMd, /@.agents\/field-notes\.md/)
+    assert.match(agentsMd, /<!-- factory:begin -->/)
+    assert.match(agentsMd, /<!-- factory:end -->/)
+    assert.match(agentsMd, /software-reviewer/)
+    assert.doesNotMatch(agentsMd, /docs\/confluence/)
+
+    const worklog = await readFile(join(res.directory, "worklog.org"), "utf8")
+    assert.match(worklog, /\* Queue/)
+
+    // Second run without force skips existing modified files
+    const second = await createWorkspace({ target: tempDir, name: "JIRA-123", harness: "antigravity" })
+    assert.ok(second.files.every((file) => file.status === "unchanged"))
+  } finally {
+    await rm(tempDir, { recursive: true, force: true })
+  }
+})
+
+test("createWorkspace maps harness hidden folders and rejects unsafe workspace IDs", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "factory-test-ws-harness-"))
+  try {
+    const oc = await createWorkspace({ target: tempDir, name: "oc-ws", harness: "opencode" })
+    assert.ok((await readdir(join(oc.directory, ".opencode"))).includes("field-notes.md"))
+
+    const claude = await createWorkspace({ target: tempDir, name: "cl-ws", harness: "claude" })
+    assert.ok((await readdir(join(claude.directory, ".claude"))).includes("field-notes.md"))
+
+    await assert.rejects(() => createWorkspace({ target: tempDir, name: "../escape" }), /Invalid workspace/)
+    await assert.rejects(() => createWorkspace({ target: tempDir, name: "a/b" }), /Invalid workspace/)
   } finally {
     await rm(tempDir, { recursive: true, force: true })
   }

@@ -17,7 +17,7 @@ The skill accepts optional arguments. When the invoking message specifies one, f
 
 - `help` — Print the purpose paragraph, the gate-sequence table, the four-agents table, and this Arguments section, then stop. Do not run the gates.
 - `init` — Read `references/init.md` and follow it to bootstrap or refresh the project's instructions file (`AGENTS.md` or `CLAUDE.md`). If that file is missing or unreadable, say so and stop. If the invoking message contains extra text besides `init`, treat that text as context.
-- `workspace [name]` — Read `references/workspace.md` and follow it to scaffold a factory workspace (`factory/workspaces/<name>/`) for a change or ticket.
+- `workspace [workspace_id]` — Read `references/workspace.md` and follow it to scaffold `<cwd>/<workspace_id>/` with `AGENTS.md`, `worklog.org`, empty `.envrc` and `.tool-versions`, `docs/backlog/README.md`, `docs/scratch-files/`, `repos/`, `tmp/`, and `<harness-dir>/field-notes.md`.
 - Any other invocation — Run the gate sequence as documented below.
 
 ## Core Directives

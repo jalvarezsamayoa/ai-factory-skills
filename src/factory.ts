@@ -25,6 +25,7 @@ export async function runFactoryAction(request: FactoryRequest): Promise<string>
       const workspace = await createWorkspace({
         target: directory,
         name: request.name,
+        harness: request.harness === "all" ? undefined : request.harness,
         force: request.force,
       })
       return describeWorkspace(workspace, directory)
@@ -92,47 +93,56 @@ export function parseFactoryArgs(input: string): FactoryRequest {
   return { action, name, harness, global, force }
 }
 
-export const HELP = `Factory — AI software development factory
+export const HELP = `Factory - AI software development factory
 
 Usage
   /factory help
-  /factory workspace [name]
+  /factory workspace [workspace_id] [--harness <opencode|claude|antigravity>] [--force]
   /factory init [harness] [--global] [--force]
 
 Commands
-  help                 Show this help.
-  workspace [name]     Create factory/workspaces/<name>/ with the brief, plan,
-                       contract, review, bug, and state templates. Default: default.
-  init [harness]       Install the factory agents, skill, and command files.
-                       Harnesses: opencode, claude, antigravity, all.
-                       Default: opencode. Use --global for the user config,
-                       and --force to overwrite files you have edited.
+  help                       Show this help.
+  workspace [workspace_id]   Create <cwd>/<workspace_id>/ with AGENTS.md, worklog.org,
+                             .envrc, .tool-versions, docs/{backlog,scratch-files},
+                             repos/, tmp/, and <harness-dir>/field-notes.md.
+                             Default: default.
+  init [harness]             Install the factory agents, skills, and command files.
+                             Harnesses: opencode, claude, antigravity, all.
+                             Default: opencode. Use --global for the user config,
+                             and --force to overwrite files you have edited.
 
 Agents
-  contrarian           Challenges assumptions and argues for a safer or simpler plan.
-  contractor           Implements an approved plan and contract.
-  software-reviewer    Reviews correctness, maintainability, tests, and regressions.
-  security-reviewer    Reviews authn/authz, input handling, secrets, and dependencies.
-  bug-hunter           Reproduces failures, finds root causes, and adds regression tests.
+  contrarian                 Challenges assumptions and argues for a safer or simpler plan.
+  contractor                 Pressure-tests procedures, tickets, and contracts.
+  software-reviewer          Reviews correctness, complexity, maintainability, and tests.
+  security-reviewer          Reviews authn/authz, input handling, secrets, and dependencies.
+  bug-hunter                 Proves defects with executable tests or reproduction scripts.
 
-Skill
-  factory              The phase-by-phase workflow that coordinates the agents.
+Skills
+  factory                    Eight-gate software development workflow.
+  bug-hunting                Empirical, execution-backed bug hunting methodology.
+  field-notes                Read-before-planning and write-on-failure notes protocol.
+  scratch-files              Pre-plan design drafts under docs/scratch-files/.
+  worklog                    Cross-repo coordination via uncommitted worklog.org.
 
 Workspace layout
-  factory/workspaces/<name>/
-    brief.md           Problem, goals, non-goals, constraints, success signals
-    plan.md            Approach, alternatives, steps, risks, rollback, decisions
-    contract.md        Deliverables, acceptance criteria, quality gates
-    reviews/           software.md and security.md
-    bugs/              Reproduction notes and failing tests
-    state.json         Current phase
+  <workspace_id>/
+    AGENTS.md                Workspace instructions + managed factory block
+    worklog.org              Live Org-mode Mission Control tracker
+    .envrc                   Empty direnv file
+    .tool-versions           Empty tool-versions file
+    <harness-dir>/           field-notes.md (.opencode/, .claude/, or .agents/)
+    docs/backlog/README.md   Durable Org-mode backlog guide and templates
+    docs/scratch-files/      Pre-plan notes and design drafts
+    repos/                   Target git repositories
+    tmp/                     Temporary files and scripts
 
 Setup
-  OpenCode: add "@jalvarezsamayoa/factory" to "plugins" in opencode.jsonc.
-  Claude:   npx @jalvarezsamayoa/factory init claude
+  OpenCode:    add "@jalvarezsamayoa/factory" to "plugins" in opencode.jsonc.
+  Claude:      npx @jalvarezsamayoa/factory init claude
   Antigravity: npx @jalvarezsamayoa/factory init antigravity
 
-Run /factory workspace to start, then /factory help to review the workflow.
+Run /factory workspace <workspace_id> to start, then /factory help to review the workflow.
 `
 
 function resolveHarnesses(value: FactoryRequest["harness"]): Harness[] {

@@ -20,7 +20,7 @@ Before any code is written, for every feature, bugfix, refactor, or release task
 - Impact analysis is done: the callers and dependents of each symbol to change are listed. Use a code-intelligence tool such as codegraph when it is available.
 - Security design is checked: trust boundaries, data flows, and new inputs are reviewed.
 - For tasks needing design exploration (new feature, new abstraction, or architecture decision), exploration and alternatives are drafted in a scratch file under `docs/scratch-files/` per the `scratch-files` skill and promoted into the plan.
-- Field notes are checked: `docs/field-notes.md` (or `.opencode/field-notes.md` if present) was read per the `field-notes` skill, and applicable notes were cited or noted as none applicable.
+- Field notes are checked: `<harness-dir>/field-notes.md` (`.opencode/`, `.claude/`, or `.agents/`) was read per the `field-notes` skill, and applicable notes were cited or noted as none applicable.
 - Worklog checked (when present): if `worklog.org` exists at the workspace root, a standup scan was run and the ticket is claimed `IN-PROGRESS` with `:SESSION:` and `NEXT:` per the `worklog` skill.
 - If the plan updates source code, it must include explicit stages for code review, security review, and documentation. A plan missing any of the three is incomplete and must be revised before implementation.
 - No planned work goes beyond the request. Speculative features and single-use abstractions are removed.

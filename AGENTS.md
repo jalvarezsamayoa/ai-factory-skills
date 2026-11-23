@@ -15,7 +15,7 @@ This repository ships portable agents, skills, commands, a CLI (`factory`), and 
   - `src/index.ts`: OpenCode V2 plugin entrypoint (`Plugin.define`). Registers skills, `/factory` command, and `factory` tool.
   - `src/install.ts`: Multi-harness installer for OpenCode (`.opencode/`), Claude Code (`.claude/`), and Antigravity (`.agents/plugins/factory/`).
   - `src/factory.ts`: Shared control-plane actions (`help`, `workspace`, `init`) and argument parser.
-  - `src/workspace.ts`: Workspace scaffolding (`factory/workspaces/<slug>/`).
+  - `src/workspace.ts`: Workspace scaffolding (`<cwd>/<workspace_id>/`).
   - `src/content.ts`: Package root resolution and Markdown frontmatter helpers.
   - `src/cli.ts`: `factory` binary entrypoint (`dist/cli.js`).
 - `test/factory.test.js`: Node built-in test suite (`node:test`) covering argument parsing, workspace creation, and multi-harness installation.

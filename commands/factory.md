@@ -8,9 +8,11 @@ command as `$ARGUMENTS`.
 If a `factory` tool is available, prefer it over manual file operations:
 
 - `help` or no arguments: show the factory help.
-- `workspace [name]`: create `factory/workspaces/<name>/` with the brief, plan,
-  contract, review, bug, and state templates. Default name: `default`.
-- `init [harness]`: install the factory agents, skill, and command files.
+- `workspace [workspace_id]`: create `<cwd>/<workspace_id>/` with `AGENTS.md`,
+  `worklog.org`, empty `.envrc` and `.tool-versions`, `docs/backlog/README.md`,
+  `docs/scratch-files/`, `repos/`, `tmp/`, and `<harness-dir>/field-notes.md`.
+  Default name: `default`.
+- `init [harness]`: install the factory agents, skills, and command files.
   Harnesses: `opencode`, `claude`, `antigravity`, or `all`. Default: `opencode`.
 
 If the `factory` tool is not available, perform the same work directly:
@@ -28,6 +30,6 @@ Never overwrite a file the user has edited unless the arguments include
 `--force`. Report every file created, updated, skipped, or unchanged.
 
 After any action, tell the user the exact next command to run. The usual next
-step after `workspace` is to fill in `brief.md`, then ask the contrarian agent
-to challenge it. The usual next step after `init` is to reload the harness so it
-discovers the new agent files.
+step after `workspace` is to enter `<workspace_id>/`, fill in the Goals section
+of `AGENTS.md`, and track work in `worklog.org`. The usual next step after `init`
+is to reload the harness so it discovers the new agent and skill files.

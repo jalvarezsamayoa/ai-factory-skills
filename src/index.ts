@@ -35,7 +35,7 @@ const factoryToolInput = {
     },
     name: {
       type: "string",
-      description: "Workspace name for `workspace`. Defaults to `default`.",
+      description: "Workspace ID for `workspace` (creates <cwd>/<name>/). Defaults to `default`.",
     },
     harness: {
       type: "string",

@@ -4,17 +4,18 @@ Reference procedure and canonical templates for initializing the field-notes pat
 
 ## Procedure
 
-1. Ask for explicit user consent before modifying any files. State that you will create `docs/field-notes.md` and append a `## Field Notes` section to the project's instructions file (`AGENTS.md`, or `CLAUDE.md` if the repository uses that instead).
-2. Create directory `docs/` at the project root if missing.
-3. Write `docs/field-notes.md` using the canonical template below. Never overwrite an existing field-notes file (`docs/field-notes.md` or `.opencode/field-notes.md`) unless the user explicitly requests a reset.
-4. Check the project's instructions file (`AGENTS.md`, or `CLAUDE.md` if present and `AGENTS.md` is absent):
+1. Determine `<harness-dir>` for the active harness (`.opencode` for OpenCode, `.claude` for Claude Code, `.agents` for Antigravity).
+2. Ask for explicit user consent before modifying any files. State that you will create `<harness-dir>/field-notes.md` and append a `## Field Notes` section to the project's instructions file (`AGENTS.md`, or `CLAUDE.md` if the repository uses that instead).
+3. Create directory `<harness-dir>/` at the workspace root if missing.
+4. Write `<harness-dir>/field-notes.md` using the canonical template below. Never overwrite an existing field-notes file unless the user explicitly requests a reset.
+5. Check the project's instructions file (`AGENTS.md`, or `CLAUDE.md` if present and `AGENTS.md` is absent):
    - If neither exists, create `AGENTS.md` with the canonical section template below.
    - If the instructions file exists and does not contain `## Field Notes`, append the canonical section to the end of the file.
    - If it already contains `## Field Notes`, leave it untouched.
 
 ## Canonical Templates
 
-### docs/field-notes.md Template
+### `<harness-dir>/field-notes.md` Template
 
 ```markdown
 # Field Notes
@@ -68,5 +69,7 @@ Append a new note immediately when you encounter and resolve:
 ```markdown
 ## Field Notes
 
-**MANDATORY PROTOCOL:** All agents and subagents must read `docs/field-notes.md` (or `.opencode/field-notes.md` if present) before formulating plans or executing tasks. Active notes (FN-001, FN-002, etc.) must be applied to all subagent dispatches and implementations. Any new error or failure must be recorded immediately in the field-notes file.
+@<harness-dir>/field-notes.md
+
+**MANDATORY PROTOCOL:** All agents and subagents must read `<harness-dir>/field-notes.md` before formulating plans or executing tasks. Active notes (FN-001, FN-002, etc.) must be applied to all subagent dispatches and implementations. Any new error or failure must be recorded immediately in `<harness-dir>/field-notes.md`.
 ```

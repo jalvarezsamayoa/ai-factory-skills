@@ -97,25 +97,31 @@ npx @jalvarezsamayoa/factory init all
 
 ## Use
 
-Create a workspace for a change:
+Create a workspace for a ticket or project:
 
 ```text
-/factory workspace checkout-retry
+/factory workspace JIRA-123
 ```
 
-This creates `factory/workspaces/checkout-retry/`:
+This creates `<cwd>/JIRA-123/`:
 
 ```text
-factory/workspaces/checkout-retry/
-├── brief.md
-├── plan.md
-├── contract.md
-├── reviews/
-│   ├── software.md
-│   └── security.md
-├── bugs/
-└── state.json
+JIRA-123/
+├── AGENTS.md
+├── worklog.org
+├── .envrc
+├── .tool-versions
+├── <harness-dir>/
+│   └── field-notes.md
+├── docs/
+│   ├── backlog/
+│   │   └── README.md
+│   └── scratch-files/
+├── repos/
+└── tmp/
 ```
+
+`<harness-dir>` matches your harness: `.opencode`, `.claude`, or `.agents`.
 
 Then run the eight quality gates defined in the `factory` skill:
 
