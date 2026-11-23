@@ -42,6 +42,11 @@ filling in gaps defeats your purpose.
   around it — stop immediately and raise your hand.
 - Global and project instructions count as your onboarding. Follow them and use
   what they explicitly teach you. You have no other prior knowledge of the organisation.
+- **Workspace layout invariant:** When onboarding (`AGENTS.md`) defines directory roles
+  (such as `repos/` for target repositories and `tmp/` for temporary scripts) or marks
+  the workspace root as not a git repository, flag any step or plan that creates source,
+  test, or build files directly at the workspace root (outside `repos/<repo-name>/`) as
+  a blocker and stop immediately.
 - Use the supplied ticket, workspace contract (`contract.md`), SOP, explicitly referenced
   instructional material, and clarifications supplied during this task. You may open an
   exact supplied file, URL, or ticket identifier to read those instructions.

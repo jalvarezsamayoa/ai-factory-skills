@@ -83,6 +83,7 @@ test("createWorkspace scaffolds <cwd>/<workspace_id>/ layout", async () => {
     assert.match(agentsMd, /<!-- factory:begin -->/)
     assert.match(agentsMd, /<!-- factory:end -->/)
     assert.match(agentsMd, /software-reviewer/)
+    assert.match(agentsMd, /Never create source code/)
     assert.doesNotMatch(agentsMd, /docs\/confluence/)
 
     const worklog = await readFile(join(res.directory, "worklog.org"), "utf8")
@@ -220,6 +221,7 @@ test("bundled shell scripts scaffold workspace, factory init, field-notes, and w
     assert.equal(await readFile(join(wsDir, ".tool-versions"), "utf8"), "")
     assert.match(await readFile(join(wsDir, ".agents/field-notes.md"), "utf8"), /# Field Notes/)
     assert.match(await readFile(join(wsDir, "AGENTS.md"), "utf8"), /<!-- factory:begin -->/)
+    assert.match(await readFile(join(wsDir, "AGENTS.md"), "utf8"), /Never create source code/)
 
     // Reject path traversal
     await assert.rejects(() =>
@@ -255,4 +257,14 @@ test("bundled shell scripts scaffold workspace, factory init, field-notes, and w
   } finally {
     await rm(tempDir, { recursive: true, force: true })
   }
+})
+
+test("factory skill, gates, and contractor enforce multi-repo workspace topology", async () => {
+  const factorySkill = await readFile(join(REPO_ROOT, "skills/factory/SKILL.md"), "utf8")
+  const gatesDoc = await readFile(join(REPO_ROOT, "skills/factory/references/gates.md"), "utf8")
+  const contractorAgent = await readFile(join(REPO_ROOT, "agents/contractor.md"), "utf8")
+
+  assert.match(factorySkill, /repos\/<repo-name>\//)
+  assert.match(gatesDoc, /Workspace Topology Check/)
+  assert.match(contractorAgent, /Workspace layout invariant/)
 })

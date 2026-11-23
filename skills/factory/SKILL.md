@@ -33,6 +33,7 @@ Apply these directives in every reply, in every gate.
 - State your assumptions before you act on them.
 - Prefer the simplest change that meets the request. Add nothing speculative.
 - Touch only what the request requires. Mention unrelated problems. Do not fix them unasked.
+- In multi-repo workspaces containing `repos/` (or where `AGENTS.md` marks the root as not a git repository), scope all implementation, test, and build files under `repos/<repo-name>/`. Never scaffold project code at the workspace root.
 - Write in a plain, direct conversational style: strictly ban tricolons, sets of three, balanced clauses, forced numerical contrasts, and abstract corporate jargon.
 
 ## The Gate Sequence
@@ -62,6 +63,8 @@ Second, impact analysis. When a code-intelligence tool such as codegraph is avai
 
 Third, security design. Check the plan against repository security guidelines and threat models for design-level risks before you write code.
 
+Fourth, workspace topology. If the current directory is a multi-repo workspace (`repos/` exists or `AGENTS.md` states the root is not a git repository), verify that every planned source file, test file, and build artifact resides under `repos/<repo-name>/`. Halt and revise the plan if any implementation path targets the workspace root.
+
 When the task requires design exploration, architectural brainstorming, or drafting alternatives before committing to a plan, draft them in a scratch file under `docs/scratch-files/` per the `scratch-files` skill. Promote the approved draft into the plan.
 
 When `worklog.org` exists at the workspace root, run a standup scan for stale claims and claim the ticket `IN-PROGRESS` with `:SESSION:` and a `NEXT:` line per the `worklog` skill.
@@ -78,7 +81,7 @@ A bugfix with a narrow, well-understood cause may need only a short contrarian p
 
 ## Gate 3: Contractor Pass
 
-Dispatch the `contractor` agent to pressure-test tickets, standard operating procedures, and plans before implementation starts. Give it the plan and any ticket or procedure the work depends on. The agent looks for gaps, missing acceptance criteria, hidden dependencies, and steps that cannot be carried out as written.
+Dispatch the `contractor` agent to pressure-test tickets, standard operating procedures, and plans before implementation starts. Give it the plan, the workspace `AGENTS.md` (when present, so it can enforce directory contracts such as `repos/`), and any ticket or procedure the work depends on. The agent looks for gaps, missing acceptance criteria, hidden dependencies, workspace-layout violations, and steps that cannot be carried out as written.
 
 A blocker from the contractor stops the work. Resolve it by fixing the plan, getting the missing information from the user, or recording an explicit user decision to proceed. Then run the pass again on the changed plan. Move to gate 4 only when the contractor reports no blockers.
 
@@ -135,7 +138,7 @@ Dispatch these agents by name. Pass each one the context it needs in the prompt,
 | Agent | Gate | Give it |
 | --- | --- | --- |
 | `contrarian` | 2 | The plan, the problem, the user it serves |
-| `contractor` | 3 | The plan and any ticket or procedure it relies on |
+| `contractor` | 3 | The plan, workspace `AGENTS.md` (if present), and any ticket or procedure it relies on |
 | `software-reviewer` | 5 | The diff, the plan, the tests |
 | `security-reviewer` | 6 | The diff and a note on the data it handles |
 

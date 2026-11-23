@@ -19,6 +19,10 @@ Before any code is written, for every feature, bugfix, refactor, or release task
 - Branching logic is decomposed in the plan with guard clauses, helper functions, or lookup tables, not left for later.
 - Impact analysis is done: the callers and dependents of each symbol to change are listed. Use a code-intelligence tool such as codegraph when it is available.
 - Security design is checked: trust boundaries, data flows, and new inputs are reviewed.
+- **Workspace Topology Check:** If the current directory is a Factory multi-repo workspace (`repos/` exists or `AGENTS.md` marks the root as not a git repository):
+  - Every planned source file, test file, or build artifact MUST reside under `repos/<repo-name>/`.
+  - The plan MUST NOT scaffold project files directly in the workspace root.
+  - Reject the plan at Gate 1 if implementation paths are not scoped to `repos/<repo-name>/`.
 - For tasks needing design exploration (new feature, new abstraction, or architecture decision), exploration and alternatives are drafted in a scratch file under `docs/scratch-files/` per the `scratch-files` skill and promoted into the plan.
 - Field notes are checked: `<harness-dir>/field-notes.md` (`.opencode/`, `.claude/`, or `.agents/`) was read per the `field-notes` skill, and applicable notes were cited or noted as none applicable.
 - Worklog checked (when present): if `worklog.org` exists at the workspace root, a standup scan was run and the ticket is claimed `IN-PROGRESS` with `:SESSION:` and `NEXT:` per the `worklog` skill.
@@ -73,7 +77,8 @@ Before implementation starts, for every ticket, standard operating procedure, or
 
 ### What to check
 
-- The `contractor` agent was dispatched with the plan and any ticket or procedure it relies on.
+- The `contractor` agent was dispatched with the plan, workspace `AGENTS.md` (if present), and any ticket or procedure it relies on.
+- Planned file paths respect the workspace directory contract (in multi-repo workspaces, all source/test/build files target `repos/<repo-name>/`, never the workspace root).
 - Acceptance criteria exist and can be tested.
 - Dependencies are named and available: other services, teams, access, data, and decisions.
 - Every step can be carried out as written by someone who has only the document.

@@ -99,7 +99,7 @@ write_file "$ROOT/AGENTS.md" <<EOF
 
 ## Directories
 
-\`${WORKSPACE_ID}\` is the workspace root directory. This is not a git repository. Host target git repositories under \`repos/\`.
+\`${WORKSPACE_ID}\` is the workspace root directory. This is not a git repository. Host target git repositories under \`repos/\`. Never create source code, test files, or build artifacts directly in the workspace root; all project code belongs under \`repos/<repo-name>/\`.
 
 - \`worklog.org\`: live cross-repo mission-control tracker (uncommitted coordination file; see Worklog Protocol)
 - \`tmp/\`: temporary files and scripts
