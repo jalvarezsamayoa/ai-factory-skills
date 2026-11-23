@@ -1,3 +1,10 @@
+## [0.1.5](https://github.com/jalvarezsamayoa/ai-factory-skills/compare/v0.1.4...v0.1.5) (2026-11-23)
+
+
+### Bug Fixes
+
+* enforce multi-repo workspace topology ([98aa510](https://github.com/jalvarezsamayoa/ai-factory-skills/commit/98aa510cb2a514209a28d28507da7f15ec5464c2)), closes [#4](https://github.com/jalvarezsamayoa/ai-factory-skills/issues/4)
+
 ## [0.1.4](https://github.com/jalvarezsamayoa/ai-factory-skills/compare/v0.1.3...v0.1.4) (2026-11-23)
 
 
